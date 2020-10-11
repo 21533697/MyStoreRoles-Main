@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "OrderSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Success Page</h2>
+
+<div class="form-inline">
+    <p>
+        Your Order, Has be Processed  @Html.ActionLink("Click Here!", "#","MyUser"), for your Orders.
+    </p>
+    <p>
+        Return to @Html.ActionLink("Go Back Shopping!", "ProdCatalogue", "Store")
+        <br />
+        @if (User.IsInRole("Customer"))
+        {
+            @Html.ActionLink("Go Back Dashboard!", "Index", "MyUser")
+        }
+    </p>
+</div>

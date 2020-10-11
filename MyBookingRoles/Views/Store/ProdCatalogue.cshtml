@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MyBookingRoles.Models.Store.Product>
+
+@{
+    ViewBag.Title = "Catalogue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Catalogue</h2>
+
+<table class="table table-bordered table-hover table-condensed" id="UsersWithRoles">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.CategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductPics)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>Buy</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var base64 = "";
+        var imgsrc = "";
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @if (item.ProductPics != null)
+                {
+                    base64 = Convert.ToBase64String(item.ProductPics);
+                    imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+                    <img src='@imgsrc' style="width:100px;height:100px" class="img-circle"/>
+                
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    @Html.ActionLink("Manage Product Orders", "Index", "#", new { id = item.ProductID }, new { @class = "btn btn-default" })
+
+                }
+                else
+                {
+                    @Html.ActionLink("Order Now", "OrderNow", "ShoppingCart", new { id = item.ProductID }, new { @class = "btn btn-default" })
+                }
+            </td>
+        </tr>
+    }
+</table>
+<hr />
+<div>
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        @Html.ActionLink("Manage Order", "Index", "#")
+        @Html.ActionLink("Manage Shopping Carts", "Index", "#",null, new { @class = "pull-right" })
+    }
+    else
+    {
+        @Html.ActionLink("Back to Store", "Index", "Home")
+    }
+</div>
